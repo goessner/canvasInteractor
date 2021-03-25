@@ -1,0 +1,18 @@
+{
+  "name": "canvasInteractor",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "canvas",
+    "interaction",
+    "javascript"
+  ],
+  "main": "canvasInteractor.js",
+  "author": "Stefan Goessner <fang03@web.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goessner/canvasInteractor.git"
+  },
+  "license": "MIT",
+  "microjam": {}
+}
