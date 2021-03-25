@@ -1,0 +1,55 @@
+<html>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/goessner/g2@v3.0/dist/g2.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/goessner/g2@v3.0/src/g2.selector.js"></script>
+    <script src="../canvasInteractor.js"></script>
+    <canvas id="c" width="601" height="401" style="border:1px solid black;"></canvas>
+    <script>
+        const ctx = document.getElementById('c').getContext('2d');
+        const interactor = canvasInteractor.create(ctx, { x: 300, y: 200, cartesian: true });
+        const selector = g2.selector(interactor.evt);  // sharing 'evt' object ... !
+        const g = g2().clr()                           // important with 'interaction'
+            .view(interactor.view)           // view sharing ... !
+            .grid()
+            .cir({ x: 0, y: 0, r: 30, fs: 'orange', draggable: true })
+
+        let circle = g.commands[g.commands.length - 1].a;
+        function move(sel, code, stepsize = 10) {
+            switch (code) {
+                case 37:
+                    sel.x -= stepsize;
+                    break;
+                case 38:
+                    sel.y += stepsize;
+                    break;
+                case 39:
+                    sel.x += stepsize;
+                    break;
+                case 40:
+                    sel.y -= stepsize;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        interactor
+            .on('tick', (e) => {
+                if (interactor.keys.includes(16)) {
+                    interactor.keys.forEach(key => {
+                        move(circle, key);
+                    });
+                }
+                g.exe(selector).exe(ctx);
+            })
+            .on('keydown', (e) => {
+                if (!interactor.keys.includes(16)) {
+                    move(circle, interactor.keys[0]);
+                }
+            })
+            .startTimer();
+    </script>
+</body>
+
+</html>

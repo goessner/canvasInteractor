@@ -45,6 +45,7 @@ Besides commonly used events like:
  - pointerleave
  - pointerenter
  - pointercancel
+ - keydown
  - wheel
 
 Custom events like `tick` are used to unify the usage of `requestAnimationFrame`.
@@ -73,7 +74,7 @@ interactor
     });
 ```
 
-<script src="https://cdn.jsdelivr.net/gh/goessner/g2/bin/canvasInteractor.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/goessner/canvasInteractor@wip/key_events/canvasInteractor.js"></script>
 <canvas id="c" width="601" height="401" style="border:1px solid black;"></canvas>
 <script>
 const ctx = document.getElementById('c').getContext('2d');
@@ -94,5 +95,94 @@ interactor
         }
     })
     .startTimer();
+</script>
+
+Key events can be implemented using the `keydown` event.
+Please keep in mind that `keydown` events are not registered to the `canvas` where the `CanvasRenderingContext2D` is defined, but on `globalThis`.
+
+```js
+const circle = g.commands[g.commands.length - 1].a;
+    function move(sel, code, stepsize = 10) {
+        switch (code) {
+            case 37:
+                sel.x -= stepsize;
+                break;
+            case 38:
+                sel.y += stepsize;
+                break;
+            case 39:
+                sel.x += stepsize;
+                break;
+            case 40:
+                sel.y -= stepsize;
+                break;
+            default:
+                break;
+        }
+    }
+
+interactor
+    .on('tick', (e) => {
+        if (interactor.keys && interactor.keys.includes(16)) {
+            interactor.keys.forEach(key => {
+                move(circle, key);
+            });
+        }
+        console.log(interactor.keys)
+        g.exe(selector).exe(ctx);
+    })
+    .on('keydown', (e) => {
+        if (interactor.keys && !interactor.keys.includes(16)) {
+            move(circle, interactor.keys[0]);
+        }
+    })
+    .startTimer();
+```
+
+<canvas id="c2" width="601" height="401" style="border:1px solid black;"></canvas>
+<script>
+    const ctx2 = document.getElementById('c2').getContext('2d');
+    const interactor2 = canvasInteractor.create(ctx2, { x: 300, y: 200, cartesian: true });
+    const selector2 = g2.selector(interactor2.evt);  // sharing 'evt' object ... !
+    const gg = g2().clr()                           // important with 'interaction'
+        .view(interactor2.view)           // view sharing ... !
+        .grid()
+        .cir({ x: 0, y: 0, r: 30, fs: 'orange', draggable: true })
+
+    const circle = gg.commands[gg.commands.length - 1].a;
+    function move(sel, code, stepsize = 10) {
+        switch (code) {
+            case 37:
+                sel.x -= stepsize;
+                break;
+            case 38:
+                sel.y += stepsize;
+                break;
+            case 39:
+                sel.x += stepsize;
+                break;
+            case 40:
+                sel.y -= stepsize;
+                break;
+            default:
+                break;
+        }
+    }
+
+    interactor2
+        .on('tick', (e) => {
+            if (interactor2.keys && interactor2.keys.includes(16)) {
+                interactor2.keys.forEach(key => {
+                    move(circle, key);
+                });
+            }
+            gg.exe(selector2).exe(ctx2);
+        })
+        .on('keydown', (e) => {
+            if (interactor2.keys && !interactor2.keys.includes(16)) {
+                move(circle, interactor2.keys[0]);
+            }
+        })
+        .startTimer();
 </script>
 

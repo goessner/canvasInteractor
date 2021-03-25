@@ -47,6 +47,7 @@ Components then register themself to a <code>canvasInteractor</code> instance.</
 <li>pointerleave</li>
 <li>pointerenter</li>
 <li>pointercancel</li>
+<li>keydown</li>
 <li>wheel</li>
 </ul>
 <p>Custom events like <code>tick</code> are used to unify the usage of <code>requestAnimationFrame</code>.
@@ -70,7 +71,7 @@ interactor
         }
     });
 </div></code></pre>
-<script src="https://cdn.jsdelivr.net/gh/goessner/g2/bin/canvasInteractor.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/goessner/canvasInteractor@wip/key_events/canvasInteractor.js"></script>
 <p><canvas id="c" width="601" height="401" style="border:1px solid black;"></canvas></p>
 <script>
 const ctx = document.getElementById('c').getContext('2d');
@@ -91,6 +92,91 @@ interactor
         }
     })
     .startTimer();
+</script>
+<p>Key events can be implemented using the <code>keydown</code> event.
+Please keep in mind that <code>keydown</code> events are not registered to the <code>canvas</code> where the <code>CanvasRenderingContext2D</code> is defined, but on <code>globalThis</code>.</p>
+<pre><code class="code-line language-js"><div><span class="hljs-keyword">const</span> circle = g.commands[g.commands.length - <span class="hljs-number">1</span>].a;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">move</span>(<span class="hljs-params">sel, code, stepsize = <span class="hljs-number">10</span></span>) </span>{
+        <span class="hljs-keyword">switch</span> (code) {
+            <span class="hljs-keyword">case</span> <span class="hljs-number">37</span>:
+                sel.x -= stepsize;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">38</span>:
+                sel.y += stepsize;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">39</span>:
+                sel.x += stepsize;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">40</span>:
+                sel.y -= stepsize;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">default</span>:
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+
+interactor
+    .on(<span class="hljs-string">&#x27;tick&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+        <span class="hljs-keyword">if</span> (interactor.keys &amp;&amp; interactor.keys.includes(<span class="hljs-number">16</span>)) {
+            interactor.keys.forEach(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> {
+                move(circle, key);
+            });
+        }
+        <span class="hljs-built_in">console</span>.log(interactor.keys)
+        g.exe(selector).exe(ctx);
+    })
+    .on(<span class="hljs-string">&#x27;keydown&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+        <span class="hljs-keyword">if</span> (interactor.keys &amp;&amp; !interactor.keys.includes(<span class="hljs-number">16</span>)) {
+            move(circle, interactor.keys[<span class="hljs-number">0</span>]);
+        }
+    })
+    .startTimer();
+</div></code></pre>
+<p><canvas id="c2" width="601" height="401" style="border:1px solid black;"></canvas></p>
+<script>
+    const ctx2 = document.getElementById('c2').getContext('2d');
+    const interactor2 = canvasInteractor.create(ctx2, { x: 300, y: 200, cartesian: true });
+    const selector2 = g2.selector(interactor2.evt);  // sharing 'evt' object ... !
+    const gg = g2().clr()                           // important with 'interaction'
+        .view(interactor2.view)           // view sharing ... !
+        .grid()
+        .cir({ x: 0, y: 0, r: 30, fs: 'orange', draggable: true })
+
+    const circle = gg.commands[gg.commands.length - 1].a;
+    function move(sel, code, stepsize = 10) {
+        switch (code) {
+            case 37:
+                sel.x -= stepsize;
+                break;
+            case 38:
+                sel.y += stepsize;
+                break;
+            case 39:
+                sel.x += stepsize;
+                break;
+            case 40:
+                sel.y -= stepsize;
+                break;
+            default:
+                break;
+        }
+    }
+
+    interactor2
+        .on('tick', (e) => {
+            if (interactor2.keys && interactor2.keys.includes(16)) {
+                interactor2.keys.forEach(key => {
+                    move(circle, key);
+                });
+            }
+            gg.exe(selector2).exe(ctx2);
+        })
+        .on('keydown', (e) => {
+            if (interactor2.keys && !interactor2.keys.includes(16)) {
+                move(circle, interactor2.keys[0]);
+            }
+        })
+        .startTimer();
 </script>
 
 </main>
