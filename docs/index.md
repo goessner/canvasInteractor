@@ -8,8 +8,6 @@
 "tags": []
 ---
 
-## canvasInteractor
-
 canvasInteractor is a micro-library used to handle events.
 Instead of everything registering a new event `addEventListener`, a unified instance handles them.
 Components then register themself to a `canvasInteractor` instance.
