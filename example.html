@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>canvasInteractor example</title>
+</head>
+
+<body>
+    <h1>canvasInteractor example</h1>
+    <canvas id="c" width="601" height="301" style="border:1px solid black;background-color:snow"></canvas><br>
+    <span id="fps">fps: -</span> <b>|</b> 
+    <label><input id="cartesian" type="checkbox" onchange="interactor.view.cartesian = !interactor.view.cartesian"> cartesian</label> <b>|</b>
+    <span id="zoom">zoom-scale: 1</span> <b>|</b> 
+    <span id="coords">pos: ./.</span> <b>|</b> <span id="state">state: -</span> <b>|</b>
+
+    <script src="./canvasInteractor.js"></script>
+    <script>
+    const ctx = document.getElementById('c').getContext('2d');
+    const interactor = canvasInteractor.create(ctx, {x:200,y:100,scl:1,cartesian:true});
+    const rec1 = {x:50,y:50,b:80,h:60,fs:'orange',lw:4};
+    const rec2 = {x:150,y:50,b:100,h:40,fs:'cyan',lw:4};
+    const info = {
+        coords: document.getElementById('coords'),
+        fps:    document.getElementById('fps'),
+        state:  document.getElementById('state'),
+        cartesian: document.getElementById('cartesian'),
+        zoom: document.getElementById('zoom')
+    }
+
+    function render() {
+        const w = ctx.canvas.width, h = ctx.canvas.height;
+        const {x,y,scl,cartesian} = interactor.view;
+
+        // init ...
+        ctx.setTransform(1,0,0,cartesian?-1:1,0.5,cartesian?h-0.5:0.5);
+        ctx.clearRect(0, 0, w, h);
+        // draw grid
+        if (scl > 0.2) {
+            const sz = 20*scl;
+            ctx.strokeStyle = "#ccc";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let u=x%sz,nx=w+1; u<nx; u+=sz) { ctx.moveTo(u,0); ctx.lineTo(u,h); }
+            for (let v=y%sz,ny=h+1; v<ny; v+=sz) { ctx.moveTo(0,v); ctx.lineTo(w,v); }
+            ctx.stroke();
+        }
+        // view transformation
+        ctx.setTransform(scl, 0, 0, cartesian ? -scl : scl, x+0.5, (cartesian ? h-y : y)+0.5);
+        // draw origin ...
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.stroke(new Path2D('M0,40L0,0L40,0'));
+        // ... and rectangles.
+        drawRec(rec1);
+        drawRec(rec2);
+    }
+
+    function drawRec(rec) {
+        ctx.fillStyle = rec.fs;
+        ctx.strokeStyle = rec.ls;
+        ctx.lineWidth = rec.lw;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = rec.sel === true ? 8 : 0;
+        ctx.shadowColor = 'black';
+        ctx.fillRect(rec.x,rec.y,rec.b,rec.h);
+        ctx.shadowBlur = 0;
+    }
+
+    function hitRec(x,y,rec) {
+        return (x > rec.x && x < rec.x + rec.b && y > rec.y && y < rec.y + rec.h);
+    }
+
+    function showinfo(e) {
+        const prec = Math.max(Math.log(interactor.view.scl)/Math.log(2), 0);
+        if (info.action !== 'pan')
+            info.coords.innerHTML = `pos: ${(interactor.evt.xusr).toFixed(prec)} / ${(interactor.evt.yusr).toFixed(prec)}`;
+        info.fps.innerHTML = "fps: " + canvasInteractor.fps;
+        info.state.innerHTML = "action: " + info.action;
+        info.zoom.innerHTML = "zoom-scale: " + interactor.view.scl.toFixed(2);
+        info.cartesian.checked = interactor.view.cartesian;
+    }
+ 
+    interactor
+        .on('tick', (e) => {
+            render();
+            showinfo(e);
+            info.action = '-';
+        })
+        .on('pointermove', (e) => {
+            rec1.sel = hitRec(e.xusr,e.yusr,rec1) ? true : false; 
+            rec2.sel = hitRec(e.xusr,e.yusr,rec2) ? true : false;
+            e.hit = rec1.sel || rec2.sel;
+        })
+        .on('wheel',  (e) => {   // zooming about pointer location ...
+            interactor.view.x = e.x + e.dscl*(interactor.view.x - e.x);
+            interactor.view.y = e.y + e.dscl*(interactor.view.y - e.y);
+            interactor.view.scl *= e.dscl;
+        })
+        .on('pan',  (e) => { 
+            interactor.view.x += e.dx; 
+            interactor.view.y += e.dy;
+            info.action = 'pan';
+        })
+        .on('drag', (e) => {
+            if (rec1.sel) { rec1.x += e.dxusr; rec1.y += e.dyusr; }
+            if (rec2.sel) { rec2.x += e.dxusr; rec2.y += e.dyusr; }
+            info.action = 'drag';
+        })
+        .startTimer();
+    </script>
+</body>
+</html>
