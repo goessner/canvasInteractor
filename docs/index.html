@@ -26,8 +26,8 @@
 <main>
 
 <h2 id="1-what-is-it">1. What is It ?</h2>
-<p><code>canvasInteractor</code> is a JavaScript micro-library (9.1 kB uncompressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases <a href="#1">[1]</a>.
-It implements a global event loop based on <code>requestAnimationFrame</code> and supports throttling of <code>pointermove</code> and <code>wheel</code> events via its custom <code>tick</code> event for efficient animation <a href="#2">[2]</a>. Cartesian coordinates with user defined origin are possible.</p>
+<p><code>canvasInteractor</code> is a JavaScript micro-library (4.7 kB compressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases <a href="#1">[1]</a>.
+It implements a global event loop based on <code>requestAnimationFrame</code> and supports throttling of <code>pointermove</code> and <code>wheel</code> events via its custom <code>tick</code> event for efficient animation <a href="#2">[2]</a>. Cartesian coordinates for scientific and engineering applications are supported. Pan, drag and zoom operations based on an user defined origin can be done.</p>
 <p>It was primarily implemented for use in engineering education and conference presentations.</p>
 <p><code>canvasInteractor</code> is the modern and more minimal successor of deprecated <code>canvas-area</code>  <a href="#3">[3]</a>.</p>
 <h2 id="2-how-to-initialize">2. How to Initialize ?</h2>
@@ -189,6 +189,8 @@ interactor.<span class="hljs-title function_">on</span>(<span class="hljs-string
 </tr>
 </tbody>
 </table>
+<div  ></div>
+<br>
 <h2 id="4-example">4. Example</h2>
 <p>The example shows how to use <code>canvasInteractor</code>.
 Rectangles can be <code>drag</code>ged, whereas the origin symbol can not, which induces the <code>pan</code> event. <code>zoom</code>ing is done by the pointer device' wheel operation.</p>
@@ -296,6 +298,8 @@ interactor
     })
     .startTimer();
 </script>
+<div  ></div>
+<br>
 <h3 id="example-code">Example Code</h3>
 <pre><code class="code-line language-html"><div><span class="hljs-meta">&lt;!doctype <span class="hljs-keyword">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
@@ -365,7 +369,9 @@ interactor
 D. Corbacho, Debouncing and Throttling Explained Through Examples<br>
      <a href="https://css-tricks.com/debouncing-throttling-explained-examples/">https://css-tricks.com/debouncing-throttling-explained-examples/</a></span><br>
 <span id="3">[3] S. Goessner, <code>canvas-area</code>,
-<a href="https://github.com/goessner/canvas-area">https://github.com/goessner/canvas-area</a></span></p>
+<a href="https://github.com/goessner/canvas-area">https://github.com/goessner/canvas-area</a></span><br>
+<span id="4">[4] S. Goessner, <code>canvasInteractor</code>,
+<a href="https://github.com/goessner/canvasInteractor">https://github.com/goessner/canvasInteractor</a></span></p>
 
 </main>
 </body>

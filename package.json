@@ -8,6 +8,9 @@
     "javascript"
   ],
   "main": "canvasinteractor.js",
+  "scripts": {
+    "minify": "uglifyjs ./canvasInteractor.js -o ./canvasInteractor.min.js --comments"
+  },
   "author": "Stefan Goessner <fang03@web.de>",
   "repository": {
     "type": "git",

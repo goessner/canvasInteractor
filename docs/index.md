@@ -11,8 +11,8 @@
 
 ## 1. What is It ?
 
-`canvasInteractor` is a JavaScript micro-library (9.1 kB uncompressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases [[1]](#1).
-It implements a global event loop based on `requestAnimationFrame` and supports throttling of `pointermove` and `wheel` events via its custom `tick` event for efficient animation [[2]](#2). Cartesian coordinates with user defined origin are possible. 
+`canvasInteractor` is a JavaScript micro-library (4.7 kB compressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases [[1]](#1).
+It implements a global event loop based on `requestAnimationFrame` and supports throttling of `pointermove` and `wheel` events via its custom `tick` event for efficient animation [[2]](#2). Cartesian coordinates for scientific and engineering applications are supported. Pan, drag and zoom operations based on an user defined origin can be done. 
 
 It was primarily implemented for use in engineering education and conference presentations.
 
@@ -41,6 +41,7 @@ View coordinates provided by events can be controlled in the constructor by an a
 * `x,y` &hellip; view's origin location.
 * `scl` &hellip;  view's scaling.
 * `cartesian` &hellip; cartesian coordinate system (y-axis up).
+
 
 ## 3. Handling Events
 
@@ -95,6 +96,8 @@ Callback functions registered via `on` recieve an extended event object `e`.
 |`inside` | `boolean` | Is pointer currently inside canvas. |
 |`delta` | `number` | Wheel delta. |
 |`hit` | `boolean` | Needs to be set by application within `pointermove` event. Can be treated then within `tick` event. |
+
+<br>
 
 ## 4. Example
 
@@ -284,4 +287,5 @@ D. Corbacho, Debouncing and Throttling Explained Through Examples
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[https://css-tricks.com/debouncing-throttling-explained-examples/](https://css-tricks.com/debouncing-throttling-explained-examples/)</span>    
  <span id="3">[3] S. Goessner, <code>canvas-area</code>, 
  [https://github.com/goessner/canvas-area](https://github.com/goessner/canvas-area)</span>    
-
+ <span id="4">[4] S. Goessner, Make your HTML canvas Interactive, 
+ [Researchgate, DOI: 10.13140/RG.2.2.31978.39367](https://www.researchgate.net/publication/360034117_Make_your_HTML_canvas_Interactive)</span>    
