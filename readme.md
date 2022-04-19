@@ -8,11 +8,9 @@ It implements a global event loop based on `requestAnimationFrame` and supports 
 `canvasInteractor` is the modern and more minimal successor of deprecated [canvas-area](https://github.com/goessner/canvas-area).  
 It was primarily implemented for use by my students for web-kinematics projects.
 
-## Read more about it ...
+## Read more about it ... example please !
 
 [https://goessner.github.io/canvasInteractor](https://goessner.github.io/canvasInteractor)
-
-![show](img/canvas-area.gif)
 
 
 ## CDN
@@ -25,7 +23,7 @@ Use a local instance or following link for `canvasInteractor.js`.
 
 * __Does not work properly with Mobile Device X and Touch Screen Y ?__
   * Desktop browsers only are addressed primarily.
-  * Implementation of touch events is experimental (*pan* works with touch and *resize* also using a *pen* now).
+  * Implementation of touch events is experimental (*pan* works with touch).
 
 * __Can you implement feature X and possibly feature Y ?__
   * `canvasInteractor` serves my personal needs very well as it is.

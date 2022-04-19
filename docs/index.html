@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1,user-scalable=no">
 <meta name="description" content="How to make your canvas element interactive">
-<meta name="author" content="Stefan Gössner<sup>1</sup>">
+<meta name="author" content="Stefan Gössner<sup>1</sup>,<a href='https://github.com/goessner/canvasInteractor'><svg height='16' width='16' viewBox='0 0 16 16'><path fill-rule='evenodd' fill='#1f3939' clip-rule='evenodd' d='M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z'></path></svg></a>">
 <meta name="date" content="Fri Apr 01 2022 00:00:00 GMT+0200 (Mitteleuropäische Sommerzeit)">
 <meta name="keywords" content="canvasInteractor,canvas,javascript,events,requestAnimationFrame,throttling,event loop">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/vs.min.css">
@@ -18,7 +18,7 @@
 <header>
 <h1><code>canvasInteractor</code></h1>
 <h3>Make your HTML canvas Interactive</h3>
-<h4>Stefan Gössner<sup>1</sup></h4>
+<h4>Stefan Gössner<sup>1</sup>, <a href='https://github.com/goessner/canvasInteractor'><svg height='16' width='16' viewBox='0 0 16 16'><path fill-rule='evenodd' fill='#1f3939' clip-rule='evenodd' d='M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z'></path></svg></a></h4>
 <h5><sup>1</sup>Dortmund University of Applied Sciences. Department of Mechanical Engineering</h5>
 <h5>April 2022</h5>
 <h5><b>Keywords:</b> canvasInteractor, canvas, javascript, events, requestAnimationFrame, throttling, event loop</h5>
@@ -26,16 +26,18 @@
 <main>
 
 <h2 id="1-what-is-it">1. What is It ?</h2>
-<p><code>canvasInteractor</code> is a micro-library (9.1 kB uncompressed) used to handle pointer events together with one or more HTML canvases.
-It implements a global event loop based on <code>requestAnimationFrame</code> and supports throttling of <code>pointermove</code> and <code>wheel</code> events via its custom <code>tick</code> event. Cartesian coordinates with user defined origin are possible.</p>
+<p><code>canvasInteractor</code> is a JavaScript micro-library (9.1 kB uncompressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases <a href="#1">[1]</a>.
+It implements a global event loop based on <code>requestAnimationFrame</code> and supports throttling of <code>pointermove</code> and <code>wheel</code> events via its custom <code>tick</code> event for efficient animation <a href="#2">[2]</a>. Cartesian coordinates with user defined origin are possible.</p>
+<p>It was primarily implemented for use in engineering education and conference presentations.</p>
+<p><code>canvasInteractor</code> is the modern and more minimal successor of deprecated <code>canvas-area</code>  <a href="#3">[3]</a>.</p>
 <h2 id="2-how-to-initialize">2. How to Initialize ?</h2>
 <p>For each HTML canvas in an HTML document an instance via <code>canvasInteractor.create</code> is required.</p>
 <pre><code class="code-line language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;c&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;601&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;401&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./canvasInteractor.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
     <span class="hljs-keyword">const</span> ctx = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;c&#x27;</span>).<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
-    <span class="hljs-keyword">const</span> interactor = canvasInteractor.<span class="hljs-title function_">create</span>(ctx, {<span class="hljs-attr">x</span>: <span class="hljs-number">300</span>, 
-                                                     <span class="hljs-attr">y</span>: <span class="hljs-number">200</span>, 
+    <span class="hljs-keyword">const</span> interactor = canvasInteractor.<span class="hljs-title function_">create</span>(ctx, {<span class="hljs-attr">x</span>: <span class="hljs-number">300</span>,  <span class="hljs-comment">// view ...</span>
+                                                     <span class="hljs-attr">y</span>: <span class="hljs-number">200</span>,  <span class="hljs-comment">// ... properties</span>
                                                      <span class="hljs-attr">cartesian</span>: <span class="hljs-literal">true</span>});
     <span class="hljs-comment">// ...</span>
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -46,8 +48,7 @@ It implements a global event loop based on <code>requestAnimationFrame</code> an
 <ul>
 <li><code>x,y</code> … view's origin location.</li>
 <li><code>scl</code> …  view's scaling.</li>
-<li><code>cartesian</code> … cartesian coordinate system (y-axis up).
-<br><br><br><br><br><br></li>
+<li><code>cartesian</code> … cartesian coordinate system (y-axis up).</li>
 </ul>
 <h2 id="3-handling-events">3. Handling Events</h2>
 <p>Each <code>canvasInteractor</code> instance handles DOM pointer events and some custom events.</p>
@@ -184,80 +185,20 @@ interactor.<span class="hljs-title function_">on</span>(<span class="hljs-string
 <tr>
 <td style="text-align:left"><code>hit</code></td>
 <td style="text-align:center"><code>boolean</code></td>
-<td style="text-align:left">Needs to be set by application within <code>pointermove</code> event. Can be considered then within <code>tick</code> event.</td>
+<td style="text-align:left">Needs to be set by application within <code>pointermove</code> event. Can be treated then within <code>tick</code> event.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-example">4. Example</h2>
-<p>This example shows how to use the <code>canvasInteractor</code>.
-The <code>blue</code> circle can be <code>drag</code>ged, wheras the <code>orange</code> circle can not, which induces the <code>pan</code> event.</p>
-<pre><code class="code-line language-html"><div><span class="hljs-meta">&lt;!doctype <span class="hljs-keyword">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>canvasInteractor example<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>canvasInteractor example<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;c&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;601&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;301&quot;</span> 
-            <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid black;background-color:snow&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
-
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./canvasInteractor.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
-    <span class="hljs-keyword">const</span> ctx = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;c&#x27;</span>).<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
-    <span class="hljs-keyword">const</span> interactor = canvasInteractor.<span class="hljs-title function_">create</span>(ctx, {<span class="hljs-attr">x</span>:<span class="hljs-number">200</span>,
-                                                     <span class="hljs-attr">y</span>:<span class="hljs-number">100</span>,
-                                                     <span class="hljs-attr">scl</span>:<span class="hljs-number">1</span>,
-                                                     <span class="hljs-attr">cartesian</span>:<span class="hljs-literal">true</span>});
-    <span class="hljs-keyword">const</span> rec1 = {<span class="hljs-attr">x</span>:<span class="hljs-number">50</span>,<span class="hljs-attr">y</span>:<span class="hljs-number">50</span>,<span class="hljs-attr">b</span>:<span class="hljs-number">80</span>,<span class="hljs-attr">h</span>:<span class="hljs-number">60</span>,<span class="hljs-attr">fs</span>:<span class="hljs-string">&#x27;orange&#x27;</span>,<span class="hljs-attr">lw</span>:<span class="hljs-number">4</span>};
-    <span class="hljs-keyword">const</span> rec2 = {<span class="hljs-attr">x</span>:<span class="hljs-number">150</span>,<span class="hljs-attr">y</span>:<span class="hljs-number">50</span>,<span class="hljs-attr">b</span>:<span class="hljs-number">100</span>,<span class="hljs-attr">h</span>:<span class="hljs-number">40</span>,<span class="hljs-attr">fs</span>:<span class="hljs-string">&#x27;cyan&#x27;</span>,<span class="hljs-attr">lw</span>:<span class="hljs-number">4</span>};
-
-    <span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
-        <span class="hljs-comment">// ...</span>
-    }
-
-    <span class="hljs-keyword">function</span> <span class="hljs-title function_">hitRec</span>(<span class="hljs-params">x,y,rec</span>) {
-        <span class="hljs-keyword">return</span> (x &gt; rec.<span class="hljs-property">x</span> &amp;&amp; x &lt; rec.<span class="hljs-property">x</span> + rec.<span class="hljs-property">b</span> &amp;&amp; y &gt; rec.<span class="hljs-property">y</span> &amp;&amp; y &lt; rec.<span class="hljs-property">y</span> + rec.<span class="hljs-property">h</span>);
-    }
-    interactor
-        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;tick&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
-            <span class="hljs-title function_">render</span>();
-        })
-        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;pointermove&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
-            rec1.<span class="hljs-property">sel</span> = <span class="hljs-title function_">hitRec</span>(e.<span class="hljs-property">xusr</span>,e.<span class="hljs-property">yusr</span>,rec1) ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>; 
-            rec2.<span class="hljs-property">sel</span> = <span class="hljs-title function_">hitRec</span>(e.<span class="hljs-property">xusr</span>,e.<span class="hljs-property">yusr</span>,rec2) ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
-            e.<span class="hljs-property">hit</span> = rec1.<span class="hljs-property">sel</span> || rec2.<span class="hljs-property">sel</span>;
-        })
-</span></div></code></pre>
-<pre><code class="code-line language-html"><div>        .on(&#x27;wheel&#x27;,  (e) =&gt; {   // zooming about pointer location ...
-            interactor.view.x = e.x + e.dscl*(interactor.view.x - e.x);
-            interactor.view.y = e.y + e.dscl*(interactor.view.y - e.y);
-            interactor.view.scl *= e.dscl;
-        })
-        .on(&#x27;pan&#x27;,  (e) =&gt; { 
-            interactor.view.x += e.dx; 
-            interactor.view.y += e.dy;
-        })
-        .on(&#x27;drag&#x27;, (e) =&gt; {
-            if (rec1.sel) { rec1.x += e.dxusr; rec1.y += e.dyusr; }
-            if (rec2.sel) { rec2.x += e.dxusr; rec2.y += e.dyusr; }
-        })
-        .startTimer();
-    <span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
-</div></code></pre>
-<div  ></div>
-<figcaption>Listing 3: canvasInteractor example.</figcaption><br>
-<div  ></div>
-<h1>canvasInteractor example</h1>
-<canvas id="c" width="601" height="301" style="border:1px solid black;background-color:snow"></canvas><br>
-<span id="fps">fps: -</span> <b>|</b> 
+<p>The example shows how to use <code>canvasInteractor</code>.
+Rectangles can be <code>drag</code>ged, whereas the origin symbol can not, which induces the <code>pan</code> event. <code>zoom</code>ing is done by the pointer device' wheel operation.</p>
+<p><canvas id="c" width="601" height="301" style="border:1px solid black;background-color:snow"></canvas><br>
+<span id="fps">fps: -</span> <b>|</b>
 <label><input id="cartesian" type="checkbox" onchange="interactor.view.cartesian = !interactor.view.cartesian"> cartesian</label> <b>|</b>
-<span id="zoom">zoom-scale: 1</span> <b>|</b> 
-<span id="coords">pos: ./.</span> <b>|</b> <span id="state">state: -</span> <b>|</b>
+<span id="zoom">zoom-scale: 1</span> <b>|</b>
+<span id="coords">pos: ./.</span> <b>|</b> <span id="state">state: -</span> <b>|</b></p>
 <div  ></div>
-<script src="../canvasInteractor.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
 <div  ></div>
 <script>
 const ctx = document.getElementById('c').getContext('2d');
@@ -355,6 +296,76 @@ interactor
     })
     .startTimer();
 </script>
+<h3 id="example-code">Example Code</h3>
+<pre><code class="code-line language-html"><div><span class="hljs-meta">&lt;!doctype <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>canvasInteractor example<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>canvasInteractor example<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;c&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;601&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;301&quot;</span> 
+            <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid black;background-color:snow&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-keyword">const</span> ctx = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;c&#x27;</span>).<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
+    <span class="hljs-keyword">const</span> interactor = canvasInteractor.<span class="hljs-title function_">create</span>(ctx, {<span class="hljs-attr">x</span>:<span class="hljs-number">200</span>,
+                                                     <span class="hljs-attr">y</span>:<span class="hljs-number">100</span>,
+                                                     <span class="hljs-attr">scl</span>:<span class="hljs-number">1</span>,
+                                                     <span class="hljs-attr">cartesian</span>:<span class="hljs-literal">true</span>});
+    <span class="hljs-keyword">const</span> rec1 = {<span class="hljs-attr">x</span>:<span class="hljs-number">50</span>,<span class="hljs-attr">y</span>:<span class="hljs-number">50</span>,<span class="hljs-attr">b</span>:<span class="hljs-number">80</span>,<span class="hljs-attr">h</span>:<span class="hljs-number">60</span>,<span class="hljs-attr">fs</span>:<span class="hljs-string">&#x27;orange&#x27;</span>,<span class="hljs-attr">lw</span>:<span class="hljs-number">4</span>};
+    <span class="hljs-keyword">const</span> rec2 = {<span class="hljs-attr">x</span>:<span class="hljs-number">150</span>,<span class="hljs-attr">y</span>:<span class="hljs-number">50</span>,<span class="hljs-attr">b</span>:<span class="hljs-number">100</span>,<span class="hljs-attr">h</span>:<span class="hljs-number">40</span>,<span class="hljs-attr">fs</span>:<span class="hljs-string">&#x27;cyan&#x27;</span>,<span class="hljs-attr">lw</span>:<span class="hljs-number">4</span>};
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-comment">// ...</span>
+    }
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">hitRec</span>(<span class="hljs-params">x,y,rec</span>) {
+        <span class="hljs-keyword">return</span> (x &gt; rec.<span class="hljs-property">x</span> &amp;&amp; x &lt; rec.<span class="hljs-property">x</span> + rec.<span class="hljs-property">b</span> &amp;&amp; y &gt; rec.<span class="hljs-property">y</span> &amp;&amp; y &lt; rec.<span class="hljs-property">y</span> + rec.<span class="hljs-property">h</span>);
+    }
+    interactor
+        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;tick&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+            <span class="hljs-title function_">render</span>();
+        })
+        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;pointermove&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+            rec1.<span class="hljs-property">sel</span> = <span class="hljs-title function_">hitRec</span>(e.<span class="hljs-property">xusr</span>,e.<span class="hljs-property">yusr</span>,rec1) ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>; 
+            rec2.<span class="hljs-property">sel</span> = <span class="hljs-title function_">hitRec</span>(e.<span class="hljs-property">xusr</span>,e.<span class="hljs-property">yusr</span>,rec2) ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
+            e.<span class="hljs-property">hit</span> = rec1.<span class="hljs-property">sel</span> || rec2.<span class="hljs-property">sel</span>;
+        })
+        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;wheel&#x27;</span>,  <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {   <span class="hljs-comment">// zooming about pointer location ...</span>
+            interactor.<span class="hljs-property">view</span>.<span class="hljs-property">x</span> = e.<span class="hljs-property">x</span> + e.<span class="hljs-property">dscl</span>*(interactor.<span class="hljs-property">view</span>.<span class="hljs-property">x</span> - e.<span class="hljs-property">x</span>);
+            interactor.<span class="hljs-property">view</span>.<span class="hljs-property">y</span> = e.<span class="hljs-property">y</span> + e.<span class="hljs-property">dscl</span>*(interactor.<span class="hljs-property">view</span>.<span class="hljs-property">y</span> - e.<span class="hljs-property">y</span>);
+            interactor.<span class="hljs-property">view</span>.<span class="hljs-property">scl</span> *= e.<span class="hljs-property">dscl</span>;
+        })
+        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;pan&#x27;</span>,  <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> { 
+            interactor.<span class="hljs-property">view</span>.<span class="hljs-property">x</span> += e.<span class="hljs-property">dx</span>; 
+            interactor.<span class="hljs-property">view</span>.<span class="hljs-property">y</span> += e.<span class="hljs-property">dy</span>;
+        })
+        .<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;drag&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+            <span class="hljs-keyword">if</span> (rec1.<span class="hljs-property">sel</span>) { rec1.<span class="hljs-property">x</span> += e.<span class="hljs-property">dxusr</span>; rec1.<span class="hljs-property">y</span> += e.<span class="hljs-property">dyusr</span>; }
+            <span class="hljs-keyword">if</span> (rec2.<span class="hljs-property">sel</span>) { rec2.<span class="hljs-property">x</span> += e.<span class="hljs-property">dxusr</span>; rec2.<span class="hljs-property">y</span> += e.<span class="hljs-property">dyusr</span>; }
+        })
+        .<span class="hljs-title function_">startTimer</span>();
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</div></code></pre>
+<div  ></div>
+<figcaption>Listing 3: canvasInteractor example.</figcaption><br>
+<h2 id="5-conclusion">5. Conclusion</h2>
+<p><code>canvasInteractor</code> is a tiny JavaScript library enhancing and extending HTML canvas' event handling for performant animation and geometrical interaction.</p>
+<p>A global event loop (singleton) based on <code>requestAnimationFrame</code> provides assistance with event throttling via its custom <code>tick</code> event. Cartesian coordinates preferred in scientific and engineering applications are supported. <em>Pan</em>, <em>drag</em> and <em>zoom</em> based on user defined origins can be done.</p>
+<div  ></div>
+<br>
+<h2 id="references">References</h2>
+<p><span id="1">[1] Canvas API, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API</a></span><br>
+<span id="2">[2]
+D. Corbacho, Debouncing and Throttling Explained Through Examples<br>
+     <a href="https://css-tricks.com/debouncing-throttling-explained-examples/">https://css-tricks.com/debouncing-throttling-explained-examples/</a></span><br>
+<span id="3">[3] S. Goessner, <code>canvas-area</code>,
+<a href="https://github.com/goessner/canvas-area">https://github.com/goessner/canvas-area</a></span></p>
 
 </main>
 </body>
