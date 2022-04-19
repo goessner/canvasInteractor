@@ -2,7 +2,7 @@
 "lang": "en",
 "title": "<code>canvasInteractor</code>",
 "subtitle": "Make your HTML canvas Interactive",
-"authors": ["Stefan Gössner<sup>1</sup>"],
+"authors": ["Stefan Gössner<sup>1</sup>", "<a href='https://github.com/goessner/canvasInteractor'><svg height='16' width='16' viewBox='0 0 16 16'><path fill-rule='evenodd' fill='#1f3939' clip-rule='evenodd' d='M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z'></path></svg></a>"],
 "adresses": ["<sup>1</sup>Dortmund University of Applied Sciences. Department of Mechanical Engineering"],
 "date": "April 2022",
 "description": "How to make your canvas element interactive",
@@ -11,10 +11,12 @@
 
 ## 1. What is It ?
 
-`canvasInteractor` is a micro-library (9.1 kB uncompressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases.
-It implements a global event loop based on `requestAnimationFrame` and supports throttling of `pointermove` and `wheel` events via its custom `tick` event for efficient animation. Cartesian coordinates with user defined origin are possible. It was primarily implemented for use by my students for web-kinematics projects.
+`canvasInteractor` is a JavaScript micro-library (9.1 kB uncompressed) used to handle pointer events for simple geometry editing together with one or more HTML canvases [[1]](#1).
+It implements a global event loop based on `requestAnimationFrame` and supports throttling of `pointermove` and `wheel` events via its custom `tick` event for efficient animation [[2]](#2). Cartesian coordinates with user defined origin are possible. 
 
-`canvasInteractor` is the modern and more minimal successor of deprecated [canvas-area](https://github.com/goessner/canvas-area).
+It was primarily implemented for use in engineering education and conference presentations.
+
+`canvasInteractor` is the modern and more minimal successor of deprecated `canvas-area`  [[3]](#3).
 
 
 ## 2. How to Initialize ?
@@ -26,8 +28,8 @@ For each HTML canvas in an HTML document an instance via `canvasInteractor.creat
 <script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
 <script>
     const ctx = document.getElementById('c').getContext('2d');
-    const interactor = canvasInteractor.create(ctx, {x: 300, 
-                                                     y: 200, 
+    const interactor = canvasInteractor.create(ctx, {x: 300,  // view ...
+                                                     y: 200,  // ... properties
                                                      cartesian: true});
     // ...
 </script>
@@ -39,7 +41,6 @@ View coordinates provided by events can be controlled in the constructor by an a
 * `x,y` &hellip; view's origin location.
 * `scl` &hellip;  view's scaling.
 * `cartesian` &hellip; cartesian coordinate system (y-axis up).
-<br><br><br><br><br><br>
 
 ## 3. Handling Events
 
@@ -93,74 +94,13 @@ Callback functions registered via `on` recieve an extended event object `e`.
 |`eps`  | `number` | Some pixel tolerance for selecting/hitting<br> (default = `5`). |
 |`inside` | `boolean` | Is pointer currently inside canvas. |
 |`delta` | `number` | Wheel delta. |
-|`hit` | `boolean` | Needs to be set by application within `pointermove` event. Can be considered then within `tick` event. |
+|`hit` | `boolean` | Needs to be set by application within `pointermove` event. Can be treated then within `tick` event. |
 
 ## 4. Example
 
-This example shows how to use the `canvasInteractor`.
-The `blue` circle can be `drag`ged, wheras the `orange` circle can not, which induces the `pan` event.
+The example shows how to use `canvasInteractor`.
+Rectangles can be `drag`ged, whereas the origin symbol can not, which induces the `pan` event. `zoom`ing is done by the pointer device' wheel operation.
 
-```html
-<!doctype html>
-<html>
-<head>
-    <title>canvasInteractor example</title>
-</head>
-
-<body>
-    <h1>canvasInteractor example</h1>
-    <canvas id="c" width="601" height="301" 
-            style="border:1px solid black;background-color:snow"></canvas>
-
-    <script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
-    <script>
-    const ctx = document.getElementById('c').getContext('2d');
-    const interactor = canvasInteractor.create(ctx, {x:200,
-                                                     y:100,
-                                                     scl:1,
-                                                     cartesian:true});
-    const rec1 = {x:50,y:50,b:80,h:60,fs:'orange',lw:4};
-    const rec2 = {x:150,y:50,b:100,h:40,fs:'cyan',lw:4};
-
-    function render() {
-        // ...
-    }
-
-    function hitRec(x,y,rec) {
-        return (x > rec.x && x < rec.x + rec.b && y > rec.y && y < rec.y + rec.h);
-    }
-    interactor
-        .on('tick', (e) => {
-            render();
-        })
-        .on('pointermove', (e) => {
-            rec1.sel = hitRec(e.xusr,e.yusr,rec1) ? true : false; 
-            rec2.sel = hitRec(e.xusr,e.yusr,rec2) ? true : false;
-            e.hit = rec1.sel || rec2.sel;
-        })
-``` 
-```html
-        .on('wheel',  (e) => {   // zooming about pointer location ...
-            interactor.view.x = e.x + e.dscl*(interactor.view.x - e.x);
-            interactor.view.y = e.y + e.dscl*(interactor.view.y - e.y);
-            interactor.view.scl *= e.dscl;
-        })
-        .on('pan',  (e) => { 
-            interactor.view.x += e.dx; 
-            interactor.view.y += e.dy;
-        })
-        .on('drag', (e) => {
-            if (rec1.sel) { rec1.x += e.dxusr; rec1.y += e.dyusr; }
-            if (rec2.sel) { rec2.x += e.dxusr; rec2.y += e.dyusr; }
-        })
-        .startTimer();
-    </script>
-</body>
-</html>
-```
-<figcaption>Listing 3: canvasInteractor example.</figcaption><br>
-
-<h1>canvasInteractor example</h1>
 <canvas id="c" width="601" height="301" style="border:1px solid black;background-color:snow"></canvas><br>
 <span id="fps">fps: -</span> <b>|</b> 
 <label><input id="cartesian" type="checkbox" onchange="interactor.view.cartesian = !interactor.view.cartesian"> cartesian</label> <b>|</b>
@@ -265,4 +205,83 @@ interactor
     .startTimer();
 </script>
 
+<br>
+
+### Example Code
+
+```html
+<!doctype html>
+<html>
+<head>
+    <title>canvasInteractor example</title>
+</head>
+
+<body>
+    <h1>canvasInteractor example</h1>
+    <canvas id="c" width="601" height="301" 
+            style="border:1px solid black;background-color:snow"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
+    <script>
+    const ctx = document.getElementById('c').getContext('2d');
+    const interactor = canvasInteractor.create(ctx, {x:200,
+                                                     y:100,
+                                                     scl:1,
+                                                     cartesian:true});
+    const rec1 = {x:50,y:50,b:80,h:60,fs:'orange',lw:4};
+    const rec2 = {x:150,y:50,b:100,h:40,fs:'cyan',lw:4};
+
+    function render() {
+        // ...
+    }
+
+    function hitRec(x,y,rec) {
+        return (x > rec.x && x < rec.x + rec.b && y > rec.y && y < rec.y + rec.h);
+    }
+    interactor
+        .on('tick', (e) => {
+            render();
+        })
+        .on('pointermove', (e) => {
+            rec1.sel = hitRec(e.xusr,e.yusr,rec1) ? true : false; 
+            rec2.sel = hitRec(e.xusr,e.yusr,rec2) ? true : false;
+            e.hit = rec1.sel || rec2.sel;
+        })
+        .on('wheel',  (e) => {   // zooming about pointer location ...
+            interactor.view.x = e.x + e.dscl*(interactor.view.x - e.x);
+            interactor.view.y = e.y + e.dscl*(interactor.view.y - e.y);
+            interactor.view.scl *= e.dscl;
+        })
+        .on('pan',  (e) => { 
+            interactor.view.x += e.dx; 
+            interactor.view.y += e.dy;
+        })
+        .on('drag', (e) => {
+            if (rec1.sel) { rec1.x += e.dxusr; rec1.y += e.dyusr; }
+            if (rec2.sel) { rec2.x += e.dxusr; rec2.y += e.dyusr; }
+        })
+        .startTimer();
+    </script>
+</body>
+</html>
+```
+<figcaption>Listing 3: canvasInteractor example.</figcaption><br>
+
+
+## 5. Conclusion
+
+`canvasInteractor` is a tiny JavaScript library enhancing and extending HTML canvas' event handling for performant animation and geometrical interaction.
+
+A global event loop (singleton) based on `requestAnimationFrame` provides assistance with event throttling via its custom `tick` event. Cartesian coordinates preferred in scientific and engineering applications are supported. *Pan*, *drag* and *zoom* based on user defined origins can be done.
+
+<br>
+
+## References 
+
+<span id="1">[1] Canvas API, [https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)</span>    
+<span id="2">[2] 
+D. Corbacho, Debouncing and Throttling Explained Through Examples    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[https://css-tricks.com/debouncing-throttling-explained-examples/](https://css-tricks.com/debouncing-throttling-explained-examples/)</span>    
+ <span id="3">[3] S. Goessner, <code>canvas-area</code>, 
+ [https://github.com/goessner/canvas-area](https://github.com/goessner/canvas-area)</span>    
 
