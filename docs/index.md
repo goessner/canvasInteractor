@@ -23,7 +23,7 @@ For each HTML canvas in an HTML document an instance via `canvasInteractor.creat
 
 ```html
 <canvas id="c" width="601" height="401"></canvas>
-<script src="./canvasInteractor.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
 <script>
     const ctx = document.getElementById('c').getContext('2d');
     const interactor = canvasInteractor.create(ctx, {x: 300, 
@@ -112,7 +112,7 @@ The `blue` circle can be `drag`ged, wheras the `orange` circle can not, which in
     <canvas id="c" width="601" height="301" 
             style="border:1px solid black;background-color:snow"></canvas>
 
-    <script src="./canvasInteractor.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
     <script>
     const ctx = document.getElementById('c').getContext('2d');
     const interactor = canvasInteractor.create(ctx, {x:200,
@@ -167,7 +167,7 @@ The `blue` circle can be `drag`ged, wheras the `orange` circle can not, which in
 <span id="zoom">zoom-scale: 1</span> <b>|</b> 
 <span id="coords">pos: ./.</span> <b>|</b> <span id="state">state: -</span> <b>|</b>
 
-<script src="../canvasInteractor.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/goessner/canvasinteractor/canvasInteractor.js"></script>
 <script>
 const ctx = document.getElementById('c').getContext('2d');
 const interactor = canvasInteractor.create(ctx, {x:200,y:100,scl:1,cartesian:true});
